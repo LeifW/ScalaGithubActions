@@ -1,8 +1,8 @@
 import io.circe.{Codec, Decoder, Encoder, Json}
-import io.circe.generic.semiauto.{deriveEncoder, deriveCodec}
+import io.circe.generic.semiauto.{deriveCodec, deriveEncoder}
 import io.circe.generic.extras.Configuration
 import io.circe.yaml.Printer
-import shapeless.{ Coproduct, Generic }
+import shapeless.{Coproduct, Generic}
 import enumeratum._
 
 trait NoDescriminator {
@@ -64,9 +64,9 @@ case class CI(
 
 object CI {
   implicit val ciCodec: Codec[CI] = deriveCodec[CI]
-  def foo: Json = ciCodec(CI(name = "bob", jobs = Job(Build("ubuntu", List(Name("Build", "make install"), Uses("bob", None))))))
 }
 
 object Main {
-  def main(args: Array[String]) = println(Printer(dropNullKeys = true) pretty CI.foo)
+  val example = CI(name = "bob", jobs = Job(Build("ubuntu", List(Name("Build", "make install"), Uses("bob", None)))))
+  def main(args: Array[String]) = println(Printer(dropNullKeys = true) pretty CI.ciCodec(example))
 }
